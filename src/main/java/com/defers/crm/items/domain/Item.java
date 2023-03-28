@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document
-public class Item {
+@Document(collation = "items")
+public class Item extends BaseEntity{
     @Id
     private ObjectId id;
     @Field(value = "name")

@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @Data
 @Document
-public class ItemFile {
+public class ItemFile extends BaseEntity{
     @Id
     private ObjectId id;
     @Field(value = "path")
