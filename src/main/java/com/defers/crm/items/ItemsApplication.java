@@ -1,32 +1,30 @@
 package com.defers.crm.items;
 
-import com.defers.crm.items.properties.AppProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 import reactor.netty.http.server.HttpServer;
 
 import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
+@Slf4j
+@EnableReactiveMongoRepositories
 @ComponentScan
 public class ItemsApplication {
     public static void main(String... args) throws Exception {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ItemsApplication.class);
-        //context.register(ItemsApplication.class);
-        //context.refresh();
-        AppProperties appProperties = context.getBean("appProperties", AppProperties.class);
-        System.out.println(appProperties.getHost());
-//        HttpHandler handler = WebHttpHandlerBuilder
-//                .applicationContext(context)
-//                .build();
-//        ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
-//        DisposableChannel server = HttpServer.create()
-//                .host("localhost")
-//                .port(3520)
-//                //.host(appProperties.getHost())
-//                //.port(appProperties.getPort())
-//                .handle(adapter)
-//                .bindNow();
-        context.getBean(HttpServer.class)
-                .bindUntilJavaShutdown(Duration.ofSeconds(60), null);
+        startServer(context);
+    }
+
+    private static void startServer(AnnotationConfigApplicationContext context) {
+        HttpServer server = context.getBean(HttpServer.class);
+        server.bindUntilJavaShutdown(Duration.ofSeconds(60),
+                (disposableServer) -> log.info("Server has started on host: {} port: {} at: {}",
+                        disposableServer.host(),
+                        disposableServer.port(),
+                        ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-ddТHH:mm:ss['['VV']']"))));
     }
 }

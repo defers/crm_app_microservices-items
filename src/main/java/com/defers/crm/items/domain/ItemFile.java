@@ -10,22 +10,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.List;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Document
-public class Item {
+public class ItemFile {
     @Id
     private ObjectId id;
-    @Field(value = "name")
-    private String name;
-    @Field(value = "current_image")
+    @Field(value = "path")
+    private String path;
+    @Field(value = "item")
     @DocumentReference
-    private ItemFile currentImage;
-    @Field(value = "images")
-    @DocumentReference
-    private List<ItemFile> images;
+    private Item item;
 }

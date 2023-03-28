@@ -5,10 +5,12 @@ import com.defers.crm.items.properties.UriProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.server.RequestPredicates;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @Configuration
 public class ItemRouter {
@@ -21,8 +23,10 @@ public class ItemRouter {
 
     @Bean
     public RouterFunction<ServerResponse> routes(ItemHandler itemHandler) {
-        return RouterFunctions.route(
-                RequestPredicates.GET(uriProperties.getItemsUri()), (request) -> itemHandler.findAll(request)
-        );
+
+        return RouterFunctions.route()
+                .GET(uriProperties.getItemsUri(), request -> itemHandler.findAll(request))
+                .POST(uriProperties.getItemsUri(), accept(MediaType.APPLICATION_NDJSON), request -> itemHandler.save(request))
+                .build();
     }
 }

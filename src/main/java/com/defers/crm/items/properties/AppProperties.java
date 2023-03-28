@@ -12,6 +12,8 @@ public class AppProperties {
     private String host;
     @Value("${app.web.port}")
     private int port;
+    @Value("${app.mongo.database.name}")
+    private String dbName;
 
     public String getHost() {
         return host;
@@ -21,4 +23,7 @@ public class AppProperties {
         return port;
     }
 
+    public String getDbName() {
+        return dbName;
+    }
 }
