@@ -1,5 +1,7 @@
 package com.defers.crm.items.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +16,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document
+@Document(collection = "item_file")
 public class ItemFile extends BaseEntity{
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
     @Field(value = "path")
     private String path;

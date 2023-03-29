@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface ItemService {
     Mono<Item> save(Item item);
-    Mono<Item> update(Item item);
+    Mono<Item> update(Item item, ObjectId id);
     Mono<Item> findById(ObjectId id);
     Flux<Item> findAll();
 }

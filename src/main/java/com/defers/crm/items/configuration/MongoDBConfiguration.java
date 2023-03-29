@@ -9,15 +9,11 @@ import com.mongodb.reactivestreams.client.MongoClients;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
-import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
 import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @RequiredArgsConstructor
-@EnableTransactionManagement
 @EnableReactiveMongoAuditing
 @Configuration
 public class MongoDBConfiguration extends AbstractReactiveMongoConfiguration {
@@ -34,19 +30,24 @@ public class MongoDBConfiguration extends AbstractReactiveMongoConfiguration {
     }
     @Bean
     public MongoClientSettings mongoClientSettings() {
-        ConnectionString connectionString = new ConnectionString("mongodb://admin:admin@localhost:27017");
+        ConnectionString connectionString = new ConnectionString(getConnectionString());
         return MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
+                .retryWrites(false)
                 .build();
+    }
+
+    // TODO login and password must be not hard coded
+    private String getConnectionString() {
+        return "mongodb://admin:admin@%s:%s"
+                .formatted(
+                        appProperties.getDbHost(),
+                        appProperties.getDbPort()
+                );
     }
 
     @Bean
     public MongoClient mongoClient(MongoClientSettings mongoClientSettings) {
         return MongoClients.create(mongoClientSettings);
-    }
-
-    @Bean
-    ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory dbFactory) {
-        return new ReactiveMongoTransactionManager(dbFactory);
     }
 }

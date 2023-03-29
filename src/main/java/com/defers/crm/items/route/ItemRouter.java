@@ -26,6 +26,8 @@ public class ItemRouter {
 
         return RouterFunctions.route()
                 .GET(uriProperties.getItemsUri(), request -> itemHandler.findAll(request))
+                .GET(uriProperties.getItemsUri() + "/{id}", request -> itemHandler.findById(request))
+                .PUT(uriProperties.getItemsUri() + "/{id}", accept(MediaType.APPLICATION_NDJSON), request -> itemHandler.update(request))
                 .POST(uriProperties.getItemsUri(), accept(MediaType.APPLICATION_NDJSON), request -> itemHandler.save(request))
                 .build();
     }

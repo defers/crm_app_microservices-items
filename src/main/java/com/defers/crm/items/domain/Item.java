@@ -1,5 +1,7 @@
 package com.defers.crm.items.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document(collation = "items")
+@Document(collection = "item")
 public class Item extends BaseEntity{
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
     @Field(value = "name")
     private String name;
